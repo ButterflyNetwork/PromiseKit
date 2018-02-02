@@ -4,24 +4,10 @@
 
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
-#if __has_include("PromiseKit-Swift.h")
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored"-Wdocumentation"
-    #import "PromiseKit-Swift.h"
-    #pragma clang diagnostic pop
-#else
-    // this hack because `AnyPromise` is Swift, but we add
-    // our own methods via the below category. This hack is
-    // only required while building PromiseKit since, once
-    // built, the generated -Swift header exists.
-
-    __attribute__((objc_subclassing_restricted)) __attribute__((objc_runtime_name("AnyPromise")))
-    @interface AnyPromise : NSObject
-    + (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock NS_REFINED_FOR_SWIFT;
-    + (instancetype __nonnull)promiseWithValue:(__nullable id)value NS_REFINED_FOR_SWIFT;
-    @end
-#endif
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdocumentation"
+#import "PromiseKit-Swift.h"
+#pragma clang diagnostic pop
 
 @interface AnyPromise (obj)
 

@@ -58,6 +58,25 @@ Pod::Spec.new do |s|
     ss.ios.deployment_target = '8.0'
   end
 
+  s.subspec 'AnyPromise' do |ss|
+    ss.dependency 'PromiseKit/CorePromise'
+
+    hh = Dir['Sources/*.h'] - Dir['Sources/*+Private.h'] + Dir['Sources/AnyPromise.swift']
+
+    cc = ['Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when}.m']
+    cc += hh
+
+    ss.source_files = cc
+    ss.public_header_files = hh
+    ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
+    ss.frameworks = 'Foundation'
+
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
+    ss.tvos.deployment_target = '9.0'
+  end
+
   s.subspec 'AssetsLibrary' do |ss|
     ss.ios.source_files = 'Extensions/AssetsLibrary/Sources/*'
     ss.ios.frameworks = 'AssetsLibrary'
@@ -102,15 +121,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CorePromise' do |ss|
-    hh = Dir['Sources/*.h'] - Dir['Sources/*+Private.h']
-
-    cc = Dir['Sources/*.swift'] - ['Sources/SwiftPM.swift']
-    cc << 'Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when}.m'
-    cc += hh
+    cc = Dir['Sources/*.swift'] - Dir['Sources/SwiftPM.swift'] - Dir['Sources/AnyPromise.swift']
     
     ss.source_files = cc
-    ss.public_header_files = hh
-    ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
     ss.frameworks = 'Foundation'
     
     ss.ios.deployment_target = '8.0'
